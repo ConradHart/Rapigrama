@@ -347,8 +347,8 @@ public class Tablero implements Cloneable {
 		final Character[][] cTablero; //Matriz de caracteres para invertir
 		Integer iFila = 0;
 		Integer iColumna = 0;
-		iFila = tTablero.getTablero()[0].length();
-		iColumna = this.getDimension();
+		iFila = tTablero.getTablero()[0].length(); //8
+		iColumna = this.getDimension(); //3
 		cTablero = new Character[iFila][iColumna];
 		
 		System.out.print("\nTablero Sur(arriba-->abajo): ");
@@ -361,24 +361,25 @@ public class Tablero implements Cloneable {
 		//Invierto en sentido Sur tTablero
 		Integer i=0;
 		Integer j=0;
-		Integer tope=(iFila+1)*(iColumna+1) + 6; //24;
+		Integer tope=((iFila)*(iColumna))+iFila; //32
 		System.out.println();
-		
-		for(int z = 0; z<=tope ;z++)
-		if(i < iFila){ 
-			if(j < iColumna){
-//				cTablero[i][j] = tTablero.getTablero()[j].toLowerCase().charAt(i);
-				System.out.print(tTablero.getTablero()[j].toLowerCase().charAt(i) + " ");
-				j++;
+
+		for(int z = 0; z<=tope ;z++){
+			if(i < iFila){ 
+				if(j < iColumna){
+	//				cTablero[i][j] = tTablero.getTablero()[j].toLowerCase().charAt(i);
+					System.out.print(tTablero.getTablero()[j].toLowerCase().charAt(i) + " ");
+					j++;
+				}else{
+					j=0;
+					i++;
+					System.out.println();
+				}
 			}else{
-				j=0;
-				i++;
-				System.out.println();
+				i=0;
 			}
-		}else{
-			i=0;
 		}
-	
+
 	}
 	
 	/**
