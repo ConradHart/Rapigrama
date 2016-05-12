@@ -16,25 +16,26 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Archivo{
 	/**
 	 */
 	private static String Resource0 = "src//resources//in//00_test_inicial.in";
 	private static String Resource1 = "src//resources//in//01_unaPalabraNoEsEncontradaEnNingunaOrientación.in";
-	private static String Resource2 = "resources//in//02_unaPalabraRepetidaConDosOrientaciones.in";
-	private static String Resource3 = "resources//in//03_unaPalabraRepetidaConMismaOrientacion.in";
-	private static String Resource4 = "resources//in//04_palabraEnElExtremoDelTablero.in";
-	private static String Resource5 = "resources//in//05_enTodasLasOrientaciones.in";
-	private static String Resource6 = "resources//in//06_ningunaPalabraEsEncontrada.in";
-	private static String Resource7 = "resources//in//07_mismaPalabraEnTodasLasOrientaciones.in";
-	private static String Resource8 = "resources//in//08_fatiga.in";
-	private static String ResourceSolucion = "resources//out//rapigrama.out";
+	private static String Resource2 = "src//resources//in//02_unaPalabraRepetidaConDosOrientaciones.in";
+	private static String Resource3 = "src//resources//in//03_unaPalabraRepetidaConMismaOrientacion.in";
+	private static String Resource4 = "src//resources//in//04_palabraEnElExtremoDelTablero.in";
+	private static String Resource5 = "src//resources//in//05_enTodasLasOrientaciones.in";
+	private static String Resource6 = "src//resources//in//06_ningunaPalabraEsEncontrada.in";
+	private static String Resource7 = "src//resources//in//07_mismaPalabraEnTodasLasOrientaciones.in";
+	private static String Resource8 = "src//resources//in//08_fatiga.in";
+	private static String ResourceSolucion = "src//resources//out//rapigrama.out";
 
 
-	private Tablero tableroArchivo; //Busqueda
+	private Tablero tableroArchivo; //Tablero de palabras
 	private VectorPalabra vectorPalabrasABuscar; //Lee
-	private VectorPalabra vectorPalabrasEncontradas; //Graba
+	private VectorPalabra vectorPalabrasEncontradasAGrabar; //Graba
 
 	/**
 	 * Métodos de lectura de archivo de texto para cargar valores de matriz y de vector.
@@ -47,7 +48,7 @@ public class Archivo{
 		BufferedReader br = null;
 
 		try {
-			archivo = new File(Resource0);
+			archivo = new File(Resource1);
 			fr = new FileReader(archivo);
 			br = new BufferedReader(fr);
 			String linea = "";
@@ -111,12 +112,19 @@ public class Archivo{
 
 	}//fin leer
 
-	public void escribir() {
+	public void grabar(ArrayList<String> palabrasEncontradas) {
 		FileWriter fichero = null;
 		PrintWriter pw = null;
 		try {
-			fichero = new FileWriter(ResourceSolucion);
+			fichero = new FileWriter("C:/Users/IBM_ADMIN/Documents/Facultad/Objetos II - 1Parcial/Rapigrama/src/resources/out/rapigrama.out");
 			pw = new PrintWriter(fichero);
+			
+			// Declaramos el Iterador e imprimimos los Elementos del ArrayList
+			Iterator<String> palabrasIterator = palabrasEncontradas.iterator();
+			while(palabrasIterator.hasNext()){
+				String elemento = palabrasIterator.next();
+				pw.println(elemento+" ");
+			}
 
 			System.out.println("\nEl archivo solucion fue grabado con exito.");
 		} catch (Exception e) {
@@ -176,11 +184,11 @@ public class Archivo{
 	}
 
 	public VectorPalabra getVectorPalabrasEncontradas() {
-		return vectorPalabrasEncontradas;
+		return vectorPalabrasEncontradasAGrabar;
 	}
 
-	public void setVectorPalabrasEncontradas(VectorPalabra vectorPalabrasEncontradas) {
-		this.vectorPalabrasEncontradas = vectorPalabrasEncontradas;
+	public void setVectorPalabrasEncontradas(VectorPalabra vectorPalabrasEncontradasAGrabar) {
+		this.vectorPalabrasEncontradasAGrabar = vectorPalabrasEncontradasAGrabar;
 	}
 
 

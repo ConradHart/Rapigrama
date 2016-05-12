@@ -5,6 +5,6 @@ public class Test {
 
 		Archivo archivo1 = new Archivo();
 		archivo1.leer(); // Lee y carga el tablero y el vector en memoria
-        archivo1.buscarPalabraEnTablero();
+        archivo1.buscarPalabraEnTablero(); //Busca y graba el archivo solucion
 	}// fin main
 }
