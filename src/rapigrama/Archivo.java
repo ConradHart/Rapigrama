@@ -15,6 +15,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -115,8 +118,20 @@ public class Archivo{
 	public void grabar(ArrayList<String> palabrasEncontradas) {
 		FileWriter fichero = null;
 		PrintWriter pw = null;
-		try {
-			fichero = new FileWriter("C:/Users/IBM_ADMIN/Documents/Facultad/Objetos II - 1Parcial/Rapigrama/src/resources/out/rapigrama.out");
+		File archivo = null;
+
+		try {	
+			archivo = new File(ResourceSolucion);
+			String folder = archivo.getParent(); 
+			Path releaseFolder = Paths.get(folder);
+			
+			//Si existe el path lo creo, dentro del directorio del programa, para evitar que de error
+			if (Files.notExists(releaseFolder)) {				
+				releaseFolder.toFile().mkdirs(); 
+				releaseFolder.toFile().createNewFile(); 
+			}
+			
+			fichero = new FileWriter(ResourceSolucion);
 			pw = new PrintWriter(fichero);
 			
 			// Declaramos el Iterador e imprimimos los Elementos del ArrayList
