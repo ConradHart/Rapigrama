@@ -176,7 +176,7 @@ public class Tablero implements Cloneable {
 				 System.err.println("Exception: " + e.getMessage());
 				 System.err.println("Se produjo un error en la busqueda con sentido " + sSentido);
 			}
-		
+		}	
 			System.out.println("------------------------------------------------------------------");
 			
 			// **********************************************
@@ -197,72 +197,78 @@ public class Tablero implements Cloneable {
 			
 			iContadorDeLineasEnTablero = tTablero.getDimension();//Tablero OESTE
 			
-			bFinCiclo = false;
-			
-			sSentido = Sentido.OESTE;
-			
-			try{
-
-				//Ahora puedo buscar	
-				while((iContadorDePalabrasEncontradas < iContadorDePalabrasABuscar)&&(!bFinCiclo)){
+			//Si ya encontre todas las palabras que debia buscar no sigo buscando
+			if(!(iContadorDePalabrasABuscar == iContadorDePalabrasEncontradas)){
 					
-					System.out.println("\nBuscando en el tablero sentido Oeste(der-->izq)... ");
-					
-					for(int i=0; i<iContadorDePalabrasABuscar;i++){
-						sPalabraABuscar = vectorPalabrasABuscar.getVectorPalabra()[i].toLowerCase();
-		//				System.out.println(i+1 + " sPalabraABuscar: " + sPalabraABuscar);
-		//				System.out.println("--------------");
-		//				System.out.println("");
+	
+				bFinCiclo = false;
+				
+				sSentido = Sentido.OESTE;
+				
+				try{
+	
+					//Ahora puedo buscar	
+					while((iContadorDePalabrasEncontradas < iContadorDePalabrasABuscar)&&(!bFinCiclo)){
 						
-						for(int j=0; j<iContadorDeLineasEnTablero;j++){ //Lineas en el tablero leido
-							sLineaInvertidaOeste = reverse(tTablero.getTablero()[j]);
-							sLineaAExaminar = sLineaInvertidaOeste;
-		//					System.out.println(j+1 + " sLineaAExaminar: " + sLineaAExaminar);
-							iContadorDeCiclos++;
+						System.out.println("\nBuscando en el tablero sentido Oeste(der-->izq)... ");
+						
+						for(int i=0; i<iContadorDePalabrasABuscar;i++){
+							sPalabraABuscar = vectorPalabrasABuscar.getVectorPalabra()[i].toLowerCase();
+			//				System.out.println(i+1 + " sPalabraABuscar: " + sPalabraABuscar);
+			//				System.out.println("--------------");
+			//				System.out.println("");
 							
-							if(sLineaAExaminar.contains(sPalabraABuscar)){
-		//						System.out.println("Encontro la palabra '" + sPalabraABuscar + "' sentido " + sSentido);
-		//						System.out.println("");
-								//Busco el numero correspondiente a la palabra (previamente grabado) encontrada para grabarlo en el array de palabras encontradas
-								if(arrayListPalabrasABuscar.contains(sPalabraABuscar)){
-									int num = (arrayListPalabrasABuscar.indexOf(sPalabraABuscar))+1 ;
-									//Si el arrayListPalabrasEncontradas no esta vacio busco si fue grabada sino gabro directamente
-									if((!arrayListPalabrasEncontradas.isEmpty())&&(primerPalabra)){
-										//Busco si la palabra a grabar ya habia sido grabada previamente para no guardarla repetida, aunque el sentido sea otro
-										Iterator<String> palabrasExistentes = arrayListPalabrasEncontradas.iterator();
-										Boolean exitWhile = false;
-										while(palabrasExistentes.hasNext()&&!exitWhile){
-											String palabra = palabrasExistentes.next();
-											if((palabra.substring(0,1).contains(String.valueOf(num)))){ //Si da igual es que existe y no la agrego		
-												exitWhile = true;
-											}else{
-												arrayListPalabrasEncontradas.add(num + " " + sSentido);
-												exitWhile = true;
-											}	
+							for(int j=0; j<iContadorDeLineasEnTablero;j++){ //Lineas en el tablero leido
+								sLineaInvertidaOeste = reverse(tTablero.getTablero()[j]);
+								sLineaAExaminar = sLineaInvertidaOeste;
+			//					System.out.println(j+1 + " sLineaAExaminar: " + sLineaAExaminar);
+								iContadorDeCiclos++;
+								
+								if(sLineaAExaminar.contains(sPalabraABuscar)){
+			//						System.out.println("Encontro la palabra '" + sPalabraABuscar + "' sentido " + sSentido);
+			//						System.out.println("");
+									//Busco el numero correspondiente a la palabra (previamente grabado) encontrada para grabarlo en el array de palabras encontradas
+									if(arrayListPalabrasABuscar.contains(sPalabraABuscar)){
+										int num = (arrayListPalabrasABuscar.indexOf(sPalabraABuscar))+1 ;
+										//Si el arrayListPalabrasEncontradas no esta vacio busco si fue grabada sino gabro directamente
+										if((!arrayListPalabrasEncontradas.isEmpty())&&(primerPalabra)){
+											//Busco si la palabra a grabar ya habia sido grabada previamente para no guardarla repetida, aunque el sentido sea otro
+											Iterator<String> palabrasExistentes = arrayListPalabrasEncontradas.iterator();
+											Boolean exitWhile = false;
+											while(palabrasExistentes.hasNext()&&!exitWhile){
+												String palabra = palabrasExistentes.next();
+												if((palabra.substring(0,1).contains(String.valueOf(num)))){ //Si da igual es que existe y no la agrego		
+													exitWhile = true;
+												}else{
+													arrayListPalabrasEncontradas.add(num + " " + sSentido);
+													exitWhile = true;
+												}	
+											}
+										}else{
+											arrayListPalabrasEncontradas.add(num + " " + sSentido);
 										}
-									}else{
-										arrayListPalabrasEncontradas.add(num + " " + sSentido);
 									}
+									iContadorDePalabrasEncontradas++; //Contador de palabras buscadas
+									iContadorDePalabrasBuscadas++;
+									break;
+								}else{
+			//						System.out.println("No encontro la palabra '" + sPalabraABuscar +"'");
+			//						System.out.println("");	
+									iContadorDePalabrasBuscadas++;
 								}
-								iContadorDePalabrasEncontradas++; //Contador de palabras buscadas
-								iContadorDePalabrasBuscadas++;
-								break;
-							}else{
-		//						System.out.println("No encontro la palabra '" + sPalabraABuscar +"'");
-		//						System.out.println("");	
-								iContadorDePalabrasBuscadas++;
+			
+								if(iContadorDePalabrasBuscadas == iContadorDePalabrasEncontradas){ //Encontro todas las palabras a buscar
+									bFinCiclo = true;
+								}else if(iContadorDeCiclos == ((iContadorDePalabrasABuscar * iContadorDeLineasEnTablero)-4)){ //Recorrio todo el tablero para todas las palabras y no encontro nada
+									bFinCiclo = true;}
 							}
-		
-							if(iContadorDePalabrasBuscadas == iContadorDePalabrasEncontradas){ //Encontro todas las palabras a buscar
-								bFinCiclo = true;
-							}else if(iContadorDeCiclos == ((iContadorDePalabrasABuscar * iContadorDeLineasEnTablero)-4)){ //Recorrio todo el tablero para todas las palabras y no encontro nada
-								bFinCiclo = true;}
 						}
 					}
+				}catch(Exception e){
+					 System.err.println("Exception: " + e.getMessage());
+					 System.err.println("Se produjo un error en la busqueda con sentido " + sSentido);
 				}
-			}catch(Exception e){
-				 System.err.println("Exception: " + e.getMessage());
-				 System.err.println("Se produjo un error en la busqueda con sentido " + sSentido);
+			
 			}
 			System.out.println("------------------------------------------------------------------");	
 			
@@ -353,70 +359,75 @@ public class Tablero implements Cloneable {
 			iContadorDeLineasEnTablero = tTableroAUXSur.getDimension();//Tablero SUR cambian las lineas
 			bFinCiclo = false;
 			
-			sSentido = Sentido.SUR;
-			
-			try{
-
-				while((iContadorDePalabrasEncontradas < iContadorDePalabrasABuscar)&&(!bFinCiclo)){
-					
-					System.out.println("\nBuscando en el tablero sentido Sur(arriba-->abajo)... ");
-					
-					for(int x=0; x<iContadorDePalabrasABuscar;x++){
-						sPalabraABuscar = vectorPalabrasABuscar.getVectorPalabra()[x].toLowerCase();
-		//				System.out.println(x+1 + " sPalabraABuscar: " + sPalabraABuscar);
-		//				System.out.println("--------------");
-		//				System.out.println("");
+			//Si ya encontre todas las palabras que debia buscar no sigo buscando
+			if(!(iContadorDePalabrasABuscar == iContadorDePalabrasEncontradas)){
+				
+	
+				sSentido = Sentido.SUR;
+				
+				try{
+	
+					while((iContadorDePalabrasEncontradas < iContadorDePalabrasABuscar)&&(!bFinCiclo)){
 						
-						for(int y=0; y<iContadorDeLineasEnTablero;y++){
-							sLineaAExaminar = tTableroAUXSur.getTablero()[y].toLowerCase();
-		//					System.out.println(y+1 + " sLineaAExaminar: " + sLineaAExaminar);
-							iContadorDeCiclos++;
+						System.out.println("\nBuscando en el tablero sentido Sur(arriba-->abajo)... ");
+						
+						for(int x=0; x<iContadorDePalabrasABuscar;x++){
+							sPalabraABuscar = vectorPalabrasABuscar.getVectorPalabra()[x].toLowerCase();
+			//				System.out.println(x+1 + " sPalabraABuscar: " + sPalabraABuscar);
+			//				System.out.println("--------------");
+			//				System.out.println("");
 							
-							if(sLineaAExaminar.contains(sPalabraABuscar)){
-		//						System.out.println("Encontro la palabra '" + sPalabraABuscar + "' sentido " + sSentido);
-		//						System.out.println("");
-								//Busco el numero correspondiente a la palabra (previamente grabado) encontrada para grabarlo en el array de palabras encontradas
-								if(arrayListPalabrasABuscar.contains(sPalabraABuscar)){
-									int num = (arrayListPalabrasABuscar.indexOf(sPalabraABuscar))+1 ;
-									//Si el arrayListPalabrasEncontradas no esta vacio busco si fue grabada sino gabro directamente
-									if((!arrayListPalabrasEncontradas.isEmpty())&&(primerPalabra)){
-										//Busco si la palabra a grabar ya habia sido grabada previamente para no guardarla repetida, aunque el sentido sea otro
-										Iterator<String> palabrasExistentes = arrayListPalabrasEncontradas.iterator();
-										Boolean exitWhile = false;
-										while(palabrasExistentes.hasNext()&&!exitWhile){
-											String palabra = palabrasExistentes.next();
-											if((palabra.substring(0,1).contains(String.valueOf(num)))){ //Si da igual es que existe y no la agrego		
-												exitWhile = true;
-											}else{
-												arrayListPalabrasEncontradas.add(num + " " + sSentido);
-												exitWhile = true;
-											}	
+							for(int y=0; y<iContadorDeLineasEnTablero;y++){
+								sLineaAExaminar = tTableroAUXSur.getTablero()[y].toLowerCase();
+			//					System.out.println(y+1 + " sLineaAExaminar: " + sLineaAExaminar);
+								iContadorDeCiclos++;
+								
+								if(sLineaAExaminar.contains(sPalabraABuscar)){
+			//						System.out.println("Encontro la palabra '" + sPalabraABuscar + "' sentido " + sSentido);
+			//						System.out.println("");
+									//Busco el numero correspondiente a la palabra (previamente grabado) encontrada para grabarlo en el array de palabras encontradas
+									if(arrayListPalabrasABuscar.contains(sPalabraABuscar)){
+										int num = (arrayListPalabrasABuscar.indexOf(sPalabraABuscar))+1 ;
+										//Si el arrayListPalabrasEncontradas no esta vacio busco si fue grabada sino gabro directamente
+										if((!arrayListPalabrasEncontradas.isEmpty())&&(primerPalabra)){
+											//Busco si la palabra a grabar ya habia sido grabada previamente para no guardarla repetida, aunque el sentido sea otro
+											Iterator<String> palabrasExistentes = arrayListPalabrasEncontradas.iterator();
+											Boolean exitWhile = false;
+											while(palabrasExistentes.hasNext()&&!exitWhile){
+												String palabra = palabrasExistentes.next();
+												if((palabra.substring(0,1).contains(String.valueOf(num)))){ //Si da igual es que existe y no la agrego		
+													exitWhile = true;
+												}else{
+													arrayListPalabrasEncontradas.add(num + " " + sSentido);
+													exitWhile = true;
+												}	
+											}
+										}else{
+											arrayListPalabrasEncontradas.add(num + " " + sSentido);
 										}
-									}else{
-										arrayListPalabrasEncontradas.add(num + " " + sSentido);
 									}
+									iContadorDePalabrasEncontradas++; //Contador de palabras buscadas
+									iContadorDePalabrasBuscadas++;
+									break;
+								}else{
+			//						System.out.println("No encontro la palabra '" + sPalabraABuscar +"'");
+			//						System.out.println("");
+									iContadorDePalabrasBuscadas++;
 								}
-								iContadorDePalabrasEncontradas++; //Contador de palabras buscadas
-								iContadorDePalabrasBuscadas++;
-								break;
-							}else{
-		//						System.out.println("No encontro la palabra '" + sPalabraABuscar +"'");
-		//						System.out.println("");
-								iContadorDePalabrasBuscadas++;
+								
+								if(iContadorDePalabrasBuscadas == iContadorDePalabrasEncontradas){ //Encontro todas las palabras a buscar
+									bFinCiclo = true;
+								}else if(iContadorDeCiclos == ((iContadorDePalabrasABuscar * iContadorDeLineasEnTablero)-4)){ //Recorrio todo el tablero para todas las palabras y no encontro nada
+									bFinCiclo = true;}
 							}
-							
-							if(iContadorDePalabrasBuscadas == iContadorDePalabrasEncontradas){ //Encontro todas las palabras a buscar
-								bFinCiclo = true;
-							}else if(iContadorDeCiclos == ((iContadorDePalabrasABuscar * iContadorDeLineasEnTablero)-4)){ //Recorrio todo el tablero para todas las palabras y no encontro nada
-								bFinCiclo = true;}
 						}
 					}
+				}catch(Exception e){
+					 System.err.println("Exception: " + e.getMessage());
+					 System.err.println("Se produjo un error en la busqueda con sentido " + sSentido);
 				}
-			}catch(Exception e){
-				 System.err.println("Exception: " + e.getMessage());
-				 System.err.println("Se produjo un error en la busqueda con sentido " + sSentido);
-			}
 			
+			}
 			System.out.println("------------------------------------------------------------------");	
 			
 			// **********************************************
@@ -508,70 +519,75 @@ public class Tablero implements Cloneable {
 			iContadorDeLineasEnTablero = tTableroAUXNorte.getDimension();//Tablero SUR cambian las lineas
 			bFinCiclo = false;
 			
-			sSentido = Sentido.NORTE;
-			
-			try{
-
-				while((iContadorDePalabrasEncontradas < iContadorDePalabrasABuscar)&&(!bFinCiclo)){
+			//Si ya encontre todas las palabras que debia buscar no sigo buscando
+			if(!(iContadorDePalabrasABuscar == iContadorDePalabrasEncontradas)){
 					
-					System.out.println("\nBuscando en el tablero sentido Norte(abajo-->arriba)... ");
-					
-					for(int x=0; x<iContadorDePalabrasABuscar;x++){
-						sPalabraABuscar = vectorPalabrasABuscar.getVectorPalabra()[x].toLowerCase();
-		//				System.out.println(x+1 + " sPalabraABuscar: " + sPalabraABuscar);
-		//				System.out.println("--------------");
-		//				System.out.println("");
+	
+				sSentido = Sentido.NORTE;
+				
+				try{
+	
+					while((iContadorDePalabrasEncontradas < iContadorDePalabrasABuscar)&&(!bFinCiclo)){
 						
-						for(int y=0; y<iContadorDeLineasEnTablero;y++){
-							sLineaAExaminar = tTableroAUXNorte.getTablero()[y].toLowerCase();
-		//					System.out.println(y+1 + " sLineaAExaminar: " + sLineaAExaminar);
-							iContadorDeCiclos++;
+						System.out.println("\nBuscando en el tablero sentido Norte(abajo-->arriba)... ");
+						
+						for(int x=0; x<iContadorDePalabrasABuscar;x++){
+							sPalabraABuscar = vectorPalabrasABuscar.getVectorPalabra()[x].toLowerCase();
+			//				System.out.println(x+1 + " sPalabraABuscar: " + sPalabraABuscar);
+			//				System.out.println("--------------");
+			//				System.out.println("");
 							
-							if(sLineaAExaminar.contains(sPalabraABuscar)){
-		//						System.out.println("Encontro la palabra '" + sPalabraABuscar + "' sentido " + sSentido);
-		//						System.out.println("");
-								//Busco el numero correspondiente a la palabra (previamente grabado) encontrada para grabarlo en el array de palabras encontradas
-								if(arrayListPalabrasABuscar.contains(sPalabraABuscar)){
-									int num = (arrayListPalabrasABuscar.indexOf(sPalabraABuscar))+1 ;
-									//Si el arrayListPalabrasEncontradas no esta vacio busco si fue grabada sino gabro directamente
-									if((!arrayListPalabrasEncontradas.isEmpty())&&(primerPalabra)){
-										//Busco si la palabra a grabar ya habia sido grabada previamente para no guardarla repetida, aunque el sentido sea otro
-										Iterator<String> palabrasExistentes = arrayListPalabrasEncontradas.iterator();
-										Boolean exitWhile = false;
-										while(palabrasExistentes.hasNext()&&!exitWhile){
-											String palabra = palabrasExistentes.next();
-											if((palabra.substring(0,1).contains(String.valueOf(num)))){ //Si da igual es que existe y no la agrego		
-												exitWhile = true;
-											}else{
-												arrayListPalabrasEncontradas.add(num + " " + sSentido);
-												exitWhile = true;
-											}	
+							for(int y=0; y<iContadorDeLineasEnTablero;y++){
+								sLineaAExaminar = tTableroAUXNorte.getTablero()[y].toLowerCase();
+			//					System.out.println(y+1 + " sLineaAExaminar: " + sLineaAExaminar);
+								iContadorDeCiclos++;
+								
+								if(sLineaAExaminar.contains(sPalabraABuscar)){
+			//						System.out.println("Encontro la palabra '" + sPalabraABuscar + "' sentido " + sSentido);
+			//						System.out.println("");
+									//Busco el numero correspondiente a la palabra (previamente grabado) encontrada para grabarlo en el array de palabras encontradas
+									if(arrayListPalabrasABuscar.contains(sPalabraABuscar)){
+										int num = (arrayListPalabrasABuscar.indexOf(sPalabraABuscar))+1 ;
+										//Si el arrayListPalabrasEncontradas no esta vacio busco si fue grabada sino gabro directamente
+										if((!arrayListPalabrasEncontradas.isEmpty())&&(primerPalabra)){
+											//Busco si la palabra a grabar ya habia sido grabada previamente para no guardarla repetida, aunque el sentido sea otro
+											Iterator<String> palabrasExistentes = arrayListPalabrasEncontradas.iterator();
+											Boolean exitWhile = false;
+											while(palabrasExistentes.hasNext()&&!exitWhile){
+												String palabra = palabrasExistentes.next();
+												if((palabra.substring(0,1).contains(String.valueOf(num)))){ //Si da igual es que existe y no la agrego		
+													exitWhile = true;
+												}else{
+													arrayListPalabrasEncontradas.add(num + " " + sSentido);
+													exitWhile = true;
+												}	
+											}
+										}else{
+											arrayListPalabrasEncontradas.add(num + " " + sSentido);
 										}
-									}else{
-										arrayListPalabrasEncontradas.add(num + " " + sSentido);
 									}
+									iContadorDePalabrasEncontradas++; //Contador de palabras buscadas
+									iContadorDePalabrasBuscadas++;
+									break;
+								}else{
+			//						System.out.println("No encontro la palabra '" + sPalabraABuscar +"'");
+			//						System.out.println("");
+									iContadorDePalabrasBuscadas++;
 								}
-								iContadorDePalabrasEncontradas++; //Contador de palabras buscadas
-								iContadorDePalabrasBuscadas++;
-								break;
-							}else{
-		//						System.out.println("No encontro la palabra '" + sPalabraABuscar +"'");
-		//						System.out.println("");
-								iContadorDePalabrasBuscadas++;
+								
+								if(iContadorDePalabrasBuscadas == iContadorDePalabrasEncontradas){ //Encontro todas las palabras a buscar
+									bFinCiclo = true;
+								}else if(iContadorDeCiclos == ((iContadorDePalabrasABuscar * iContadorDeLineasEnTablero)-4)){ //Recorrio todo el tablero para todas las palabras y no encontro nada
+									bFinCiclo = true;}
 							}
-							
-							if(iContadorDePalabrasBuscadas == iContadorDePalabrasEncontradas){ //Encontro todas las palabras a buscar
-								bFinCiclo = true;
-							}else if(iContadorDeCiclos == ((iContadorDePalabrasABuscar * iContadorDeLineasEnTablero)-4)){ //Recorrio todo el tablero para todas las palabras y no encontro nada
-								bFinCiclo = true;}
 						}
 					}
+				}catch(Exception e){
+					 System.err.println("Exception: " + e.getMessage());
+					 System.err.println("Se produjo un error en la busqueda con sentido " + sSentido);
 				}
-			}catch(Exception e){
-				 System.err.println("Exception: " + e.getMessage());
-				 System.err.println("Se produjo un error en la busqueda con sentido " + sSentido);
-			}
 			
+			}
 			System.out.println("------------------------------------------------------------------");	
 			
 	//		System.out.println("TEST");
@@ -581,7 +597,7 @@ public class Tablero implements Cloneable {
 	//			String elemento = palabrasIterator.next();
 	//			System.out.println(elemento+" ");
 	//		}
-		}
+
 		
 		//Grabo el archivo con las palabras encontradas
 		if (!arrayListPalabrasEncontradas.isEmpty())
